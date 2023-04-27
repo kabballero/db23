@@ -1,0 +1,84 @@
+body{
+    margin:0px;
+    padding: 0px; 
+    background-color: #e76d09;
+  }
+  .home{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-image: url("https://static01.nyt.com/images/2015/10/24/opinion/24manguel/24manguel-superJumbo.jpg");
+    background-size: cover;
+    background-image: center;
+}
+  .header{
+    font-weight: 40;
+    text-align: center;
+    font-size: 100px;  
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .button{
+    background: #ac580b;
+    border: none;
+    border-radius: 50px;
+    font-size: 30px;
+    text-align: center;
+  }
+  .form{
+    position: fixed;
+    top: 150px;
+    align-items: center;
+    text-align: center;
+    border-radius: 50px;
+    background: #ac810b;
+  }
+  .input{
+    text-align: center;
+    border-radius: 50px;
+    font-size: 30px;
+    background: #b67b6d;
+  }
+  .title{
+    font-size: 30px;
+  }
+  .card{
+    position: fixed;
+    top: 150px;
+    align-items: center;
+    text-align: center;
+    width: 30rem;
+    height: 15rem;
+    background: #ac810b;
+  }
+  .form2{
+    position: fixed;
+    top: 150px;
+    align-items: center;
+    text-align: center;
+    width: 30rem;
+    height: auto;
+    background: #ac810b;
+  }
+  .navbar{
+    top: 0px;
+    background: #ac810b;
+  }
+  .container2{
+    top: 0px;
+    background: #ac810b;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+  }
+
