@@ -1,0 +1,16 @@
+use library;
+insert into teachers (teacherID, userid, schoolID) values (1, 1, 2);
+insert into teachers (teacherID, userid, schoolID) values (2, 2, 4);
+insert into teachers (teacherID, userid, schoolID) values (3, 3, 4);
+insert into teachers (teacherID, userid, schoolID) values (4, 4, 3);
+insert into teachers (teacherID, userid, schoolID) values (5, 5, 1);
+insert into teachers (teacherID, userid, schoolID) values (6, 6, 2);
+insert into teachers (teacherID, userid, schoolID) values (7, 7, 4);
+insert into teachers (teacherID, userid, schoolID) values (8, 8, 4);
+insert into teachers (teacherID, userid, schoolID) values (9, 9, 1);
+insert into teachers (teacherID, userid, schoolID) values (10, 10, 1);
+insert into teachers (teacherID, userid, schoolID) values (11, 11, 2);
+insert into teachers (teacherID, userid, schoolID) values (12, 12, 4);
+insert into teachers (teacherID, userid, schoolID) values (13, 13, 3);
+insert into teachers (teacherID, userid, schoolID) values (14, 14, 2);
+insert into teachers (teacherID, userid, schoolID) values (15, 15, 3);
