@@ -5,11 +5,9 @@ CREATE TABLE school (
 schoolID varchar(5),
 schoolNAME varchar(50) not null,
 streetNAME varchar(40),
-streetNUMBER int,
 zipcode int,
-area varchar(20),
 email varchar(50),
-phonenumber char(10),
+phonenumber varchar(15),
 city varchar(30),
 principal varchar(200),
 primary key (schoolID)
@@ -23,7 +21,6 @@ publisher varchar(50),
 isbn varchar(20) not null,
 pages int,
 summary varchar(1500),
-availability int(10) ,
 image blob,
 languages varchar(20),
 keywords varchar(200),
@@ -33,38 +30,36 @@ foreign key(schoolID) references school(schoolID)
 
 
 CREATE TABLE users (
+userid int(5),
 username varchar(50),
 userpassword varchar(50) not null,
-firstname varchar(30) not null,
-surname varchar(50) not null,
-streetname varchar(40),
-streetNUMBER int,
-zipcode int,
-area varchar(20),
+named varchar(40),
+address varchar(50),
 birthdate date not null,
-phonenumber char(10) not null,
-primary key(username));
+phonenumber char(20) not null,
+primary key(userid)
+);
 
 CREATE TABLE students(
 studentID char(5),
-stusername varchar(50),
+userid int(5),
 schoolID varchar(5),
 primary key(studentID),
-foreign key(stusername) references users(username),
+foreign key(userid) references users(userid),
 foreign key(schoolID) references school(schoolID));
 
 CREATE TABLE admins(
 adminID varchar(5),
-adusername varchar(50),
+userid int(5),
 primary key (adminID),
-foreign key(adusername) references users(username));
+foreign key(userid) references users(userid));
 
 CREATE TABLE teachers(
 teacherID varchar(5),
-tusername varchar(50),
+userid int(5),
 schoolID varchar(5),
 primary key (teacherID),
-foreign key(tusername) references users(username),
+foreign key(userid) references users(userid),
 foreign key(schoolID) references school(schoolID));
 
 CREATE TABLE operator(
@@ -79,22 +74,23 @@ CREATE TABLE rating(
 ratingID varchar(5),
 texts varchar(500),
 likert int,
-username varchar(50),
+userid int(5),
 bookID varchar(5),
 operatorID varchar(5),
 primary key (ratingID),
-foreign key (username) references users(username),
+foreign key (userid) references users(userid),
 foreign key (bookID) references books(bookID));
 
 CREATE TABLE bookCategory(
+categoryid int,
 category varchar(20),
-primary key (category));
+primary key (categoryid));
 
 CREATE TABLE belongs (
-category varchar(20),
+categoryid int,
 bookID varchar(5),
-primary key (category,bookID),
-foreign key (category) references bookCategory(category),
+primary key (categoryid,bookID),
+foreign key (categoryid) references bookCategory(categoryid),
 foreign key (bookID) references books(bookID));
 
 CREATE TABLE authors(
@@ -125,7 +121,7 @@ primary key (borrowID),
 foreign key (studentID) references students(studentID),
 foreign key (teacherID) references teachers(teacherID),
 foreign key (bookID) references books(bookID));
-
+use library;
 CREATE TABLE reservation(
 reservationID varchar(20),
 reservatonDate date,
