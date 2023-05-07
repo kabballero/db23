@@ -1,25 +1,25 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import css from '../css/mycss.css' 
+import '../css/mycss.css' 
 
 export default function Home() {
     return(
         <div className="home">
             <h1 className="header"> SCHOOLIB</h1>
             <div className="container">
-            <Link to="/login/theBoss">
+            <Link to="/login/admins">
             <button className="button">the boss</button>
             </Link>
             <br></br>
-            <Link to="/login/caporegime">
+            <Link to="/login/operator">
             <button className="button">caporegime</button>
             </Link>
             <br></br>
-            <Link to="/login/sonderkommando">
+            <Link to="/login/teachers">
             <button className="button">sonderkommando</button>
             </Link>
             <br></br>
-            <Link to="/login/kyles">
+            <Link to="/login/students">
             <button className="button">kyles</button>
             </Link>
             </div>

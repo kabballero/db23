@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Link, useParams } from 'react-router-dom';
-import css from '../css/mycss.css' 
+import '../css/mycss.css' ; 
 
 export default function Login() {
     const param =useParams();
@@ -15,7 +15,7 @@ export default function Login() {
         .then(response => response.json()).catch((e) => {console.log(e.message)})
         console.log(data[0].login)
         if(data[0].login=='success'){
-            window.location.href=`http://localhost:3000/${role}`
+            window.location.href=`http://localhost:3000/${role}/${userName}`
         }
         else {
             alert("you shall not pass")
