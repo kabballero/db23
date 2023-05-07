@@ -33,7 +33,14 @@ app.listen(port, () => {
   });
 
 app.get('/login/:role/:username/:kodikos', (req,res)=>{
-    let myquery="select * from "+""+req.params.role+""+" where username="+"'"+req.params.username+"'"+" and kodikos="+"'"+req.params.kodikos+"'";
+    var myquery;
+    const role=req.params.role;
+    if(role!='operator'){
+        myquery="select * from "+""+req.params.role+""+" as t1 join users as t2 on t1.userid=t2.userid where t2.username="+"'"+req.params.username+"'"+" and t2.userpassword="+"'"+req.params.kodikos+"'";
+    }
+    else {
+        myquery="select username,userpassword from operator as t1 join teachers as t2 on t1.teacherID=t2.teacherID join users as t3 on t3.userid=t2.userid where t3.username="+"'"+req.params.username+"'"+" and t3.userpassword="+"'"+req.params.kodikos+"'";
+    }
     con.query(myquery, async function(err,result,fields){
         if(err) throw err;
         if(result.length>0){
