@@ -21,19 +21,19 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/theBoss',
+    path: '/admins',
     element: <TheBoss />,
   },
   {
-    path: '/caporegime',
+    path: '/operator',
     element: <Caporegime />,
   },
   {
-    path: '/sonderkommando',
+    path: '/teachers',
     element: <Sonderkommando />,
   },
   {
-    path: '/kyles',
+    path: '/students/:userName',
     element: <Kyles />,
   }
 ]);
