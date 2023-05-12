@@ -1,149 +1,152 @@
-drop schema library;
+drop database library;
 CREATE DATABASE library;
+
 USE library;
+
 CREATE TABLE school (
-schoolID varchar(5),
+schoolID int NOT NULL AUTO_INCREMENT, 
 schoolNAME varchar(50) not null,
-streetNAME varchar(40),
+streetNAME varchar(400),
+streetNUMBER int,
 zipcode int,
-email varchar(50),
-phonenumber varchar(15),
+email varchar(50) not null,
+phonenumber char(10) not null,
 city varchar(30),
 principal varchar(200),
 primary key (schoolID)
 );
 
 CREATE TABLE books(
-bookID varchar(10),
-schoolID varchar(5),
-title varchar(100) not null,
+bookID int NOT NULL AUTO_INCREMENT,
+schoolID int,
+title varchar(100) not null, -- scraped
 publisher varchar(50),
-isbn varchar(20) not null,
-pages int,
-summary varchar(1500),
-image blob,
+isbn varchar(20) not null UNIQUE,
+pages int check(pages>0),
+summary varchar(2500),
+availability int not null check(availability>=0),
+image varchar(1000),
 languages varchar(20),
 keywords varchar(200),
 primary key(bookID),
-foreign key(schoolID) references school(schoolID)
-);
+foreign key(schoolID) references school(schoolID));
 
 
 CREATE TABLE users (
-userid int(5),
 username varchar(50),
-userpassword varchar(50) not null,
-named varchar(40),
-address varchar(50),
+password varchar(50) not null,
+fullname varchar(30) not null,
+streetname varchar(400),
+streetNUMBER int,
+zipcode int,
 birthdate date not null,
-phonenumber char(20) not null,
-primary key(userid)
-);
+phonenumber char(10) not null,
+primary key(username));
 
 CREATE TABLE students(
-studentID char(5),
-userid int(5),
-schoolID varchar(5),
+studentID int NOT NULL AUTO_INCREMENT,
+username varchar(50) not null,
+schoolID int(5) not null,
+studentborrowedbooks int not null, -- check if it is right
 primary key(studentID),
-foreign key(userid) references users(userid),
-foreign key(schoolID) references school(schoolID));
+foreign key(username) references users(username),
+foreign key(schoolID) references school(schoolID),
+CHECK(studentborrowedbooks<=2));
 
-CREATE TABLE admins(
-adminID varchar(5),
-userid int(5),
+CREATE TABLE admins( -- χειροκινητα
+adminID int NOT NULL AUTO_INCREMENT,
+username varchar(50) not null,
 primary key (adminID),
-foreign key(userid) references users(userid));
+foreign key(username) references users(username));
 
 CREATE TABLE teachers(
-teacherID varchar(5),
-userid int(5),
-schoolID varchar(5),
+teacherID int NOT NULL AUTO_INCREMENT,
+username varchar(50) not null,
+schoolID int(5) not null,
+teacherborrowedbooks int not null,
 primary key (teacherID),
-foreign key(userid) references users(userid),
-foreign key(schoolID) references school(schoolID));
+foreign key(username) references users(username),
+foreign key(schoolID) references school(schoolID),
+CHECK(teacherborrowedbooks<=1));
 
-CREATE TABLE operator(
-operatorID varchar(5),
-schoolID varchar(5),
-teacherID varchar(5),
+CREATE TABLE operators( -- χειροκινητα
+operatorID int NOT NULL AUTO_INCREMENT,
+schoolID int(5) not null,
+teacherID int(5) not null,
 primary key (operatorID),
 foreign key (schoolID) references school(schoolID),
 foreign key (teacherID) references teachers(teacherID));
 
 CREATE TABLE rating(
-ratingID varchar(5),
-texts varchar(500),
-likert int,
-userid int(5),
-bookID varchar(5),
-operatorID varchar(5),
+ratingID int NOT NULL AUTO_INCREMENT,
+texts varchar(500) not null,
+likert int not null,
+username varchar(50) not null,
+bookID int(5) not null,
+operatorID int(5) not null,
 primary key (ratingID),
-foreign key (userid) references users(userid),
-foreign key (bookID) references books(bookID));
+foreign key (username) references users(username),
+foreign key (bookID) references books(bookID),
+foreign key (operatorID) references operators(operatorID));
 
 CREATE TABLE bookCategory(
-categoryid int,
 category varchar(20),
-primary key (categoryid));
+primary key (category));
 
 CREATE TABLE belongs (
-categoryid int,
-bookID varchar(5),
-primary key (categoryid,bookID),
-foreign key (categoryid) references bookCategory(categoryid),
+category varchar(20),
+bookID int(5),
+primary key (category,bookID),
+foreign key (category) references bookCategory(category),
 foreign key (bookID) references books(bookID));
 
 CREATE TABLE authors(
-authorID varchar(10),
-authorName varchar(20),
+authorID int NOT NULL AUTO_INCREMENT,
+authorName varchar(20) not null,
 primary key (authorID));
 
 CREATE TABLE written(
-authorID varchar(10),
-bookID varchar(5),
+authorID int(10),
+bookID int(5),
 primary key (authorID, bookID),
 foreign key (authorID) references authors(authorID),
 foreign key(bookID) references books(bookID));
 
 CREATE TABLE teachersrequests(
-requestID varchar(10),
-teacherID varchar(5),
+requestID int NOT NULL AUTO_INCREMENT,
+teacherID int(5) not null,
 primary key (requestID),
 foreign key (teacherID) references teachers(teacherID));
 
 CREATE TABLE borrowrequest(
-borrowID varchar(20),
+borrowID int NOT NULL AUTO_INCREMENT,
 dateRequest date,
-studentID varchar(5),
-teacherID varchar(5),
-bookID varchar(5),
-primary key (borrowID),
-foreign key (studentID) references students(studentID),
-foreign key (teacherID) references teachers(teacherID),
+username varchar(50),
+bookID int(5),
+primary key (borrowID),#edw eixame studentID kai teachersID
+foreign key (username) references users(username),
 foreign key (bookID) references books(bookID));
-use library;
+
 CREATE TABLE reservation(
-reservationID varchar(20),
-reservatonDate date,
-duedate date,
-studentID varchar(5),
-teacherID varchar(5),
-bookID varchar(5),
+reservationID int NOT NULL AUTO_INCREMENT,
+reservationDate date not null,
+duedate date not null,
+username varchar(50) not null,
+bookID int(5) not null,
 primary key (reservationID),
-foreign key (studentID) references students(studentID),
-foreign key (teacherID) references teachers(teacherID),
+foreign key (username) references users(username),
 foreign key (bookID) references books(bookID));
 
 CREATE TABLE borrowing(
-borrowingID varchar(20),
-borrowDate date,
-duedate date,
+borrowingID int NOT NULL AUTO_INCREMENT,
+borrowDate date not null,
+duedate date not null,
 returndate date,
-studentID varchar(5),
-teacherID varchar(5),
-bookID varchar(5),
+username varchar(50) not null,
+bookID int(5) not null,
+operatorID int(5) not null,
 primary key (borrowingID),
-foreign key (studentID) references students(studentID),
-foreign key (teacherID) references teachers(teacherID),
+foreign key (username) references users(username),
+foreign key (operatorID) references operators(operatorID),
 foreign key (bookID) references books(bookID));
 

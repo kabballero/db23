@@ -15,7 +15,7 @@ var  con = mysql.createPool({
     database: "library"
 });  
 
-async function deleteOldReservers() {
+/*async function deleteOldReservers() {
     try {
       const result = con.query('delete from reservation where current_date>duedate');
       console.log(`Rows deleted`);
@@ -26,7 +26,7 @@ async function deleteOldReservers() {
 
 const job = schedule.scheduleJob('0 0 * * *', function() {
     deleteOldReservers();
-  });
+  });*/
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
@@ -57,5 +57,22 @@ app.get('/login/:role/:username/:kodikos', (req,res)=>{
             })
             res.send(data)
         }
+    });
+})
+
+app.get('/books', (req,res)=>{
+    var myquery='select * from books'
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
+
+app.get('/books/img', (req,res)=>{
+    var data=[]
+    var myquery='select image from books'
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
     });
 })
