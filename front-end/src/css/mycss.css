@@ -1,7 +1,7 @@
 body{
     margin:0px;
     padding: 0px; 
-    background-color: #e76d09;
+    background-color: #D1C0A8;
   }
   .home{
     display: flex;
@@ -31,6 +31,7 @@ body{
     border-radius: 50px;
     font-size: 30px;
     text-align: center;
+    cursor:pointer;
   }
   .form{
     position: fixed;
@@ -38,7 +39,7 @@ body{
     align-items: center;
     text-align: center;
     border-radius: 50px;
-    background: #ac810b;
+    background: #8711b6;
   }
   .input{
     text-align: center;
@@ -65,15 +66,15 @@ body{
     text-align: center;
     width: 30rem;
     height: auto;
-    background: #ac810b;
+    background: #9c56dd;
   }
   .navbar{
     top: 0px;
-    background: #ac810b;
+    background: #9c56dd;
   }
   .container2{
     top: 0px;
-    background: #ac810b;
+    background: #9c56dd;
     display: flex;
     flex-direction: row;
     justify-content: center;
