@@ -1,4 +1,4 @@
--- 3.1 
+-- 3.1.1 
 create definer=`root`@`localhost` procedure schoolBorrow(in borrowYear int, in borrowMonth int)
 select month(t3.borrowDate) borrorMonth,year(t3.borrowDate) borrorYear,t4.schoolNAME,count(t4.schoolID) borrowNum
 from( 
@@ -13,7 +13,7 @@ on
 t3.schoolID=t4.schoolID)
 group by t4.schoolID ;
 
--- 3.2
+-- 3.1.2
 create definer=`root`@`localhost` procedure authorCategory (in categoryIN varchar(50))
 select t6.authorName,t5.category from ((
 select t3.category,t4.authorID from( 
@@ -34,7 +34,7 @@ belongs as t2 on t1.bookID=t2.bookID
 where t2.category=categoryIN and borrowDate > date_sub(current_date(), interval 1 year) 
 group by username;
 
--- 3.3
+-- 3.1.3
 
 create definer=`root`@`localhost` view mostActiveTeach (named,birthdate,numBorrows)
 as
@@ -49,10 +49,16 @@ join
 group by t3.username
 order by numBorrows desc ;
 
--- 3.4
+-- 3.1.4
 use library;
 select authorName from authors 
 where authorID not in
 (select authorID from written as t1 
 join borrowing as t2 
 on t1.bookID=t2.bookID);
+
+-- 3.3.2
+CREATE definer=`root`@`localhost` PROCEDURE get_borrowedBooks (IN u_name VARCHAR(50))
+select books.title,borrowing.borrowDate
+from books join borrowing ON books.bookID = borrowing.bookID 
+where borrowing.username = u_name;
