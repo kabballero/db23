@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     element: <TheBoss />,
   },
   {
-    path: '/operator',
+    path: '/operator/:username',
     element: <Caporegime />,
   },
   {
