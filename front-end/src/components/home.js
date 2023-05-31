@@ -10,16 +10,10 @@ export default function Home() {
             <Link to="/login/admins">
             <button className="button">the boss</button>
             </Link>
-            <br></br>
             <Link to="/login/operator">
             <button className="button">caporegime</button>
-            </Link>
-            <br></br>
-            <Link to="/login/teachers">
-            <button className="button">sonderkommando</button>
-            </Link>
-            <br></br>
-            <Link to="/login/students">
+            </Link>        
+            <Link to="/login/users">
             <button className="button">kyles</button>
             </Link>
             </div>
