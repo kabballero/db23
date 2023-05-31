@@ -77,24 +77,13 @@ primary key (operatorID),
 foreign key (schoolID) references school(schoolID),
 foreign key (teacherID) references teachers(teacherID));
 
-CREATE TABLE ratingRequest(
-ratingID int NOT NULL AUTO_INCREMENT,
-texts varchar(500) not null,
-likert int not null,
-username varchar(50) not null,
-bookID int(5) not null,
-primary key (ratingID),
-foreign key (username) references users(username),
-foreign key (bookID) references books(bookID)
-);
-
 CREATE TABLE rating(
 ratingID int NOT NULL AUTO_INCREMENT,
 texts varchar(500) not null,
 likert int not null,
 username varchar(50) not null,
 bookID int(5) not null,
-operatorID int(5) not null,
+operatorID int(5),
 primary key (ratingID),
 foreign key (username) references users(username),
 foreign key (bookID) references books(bookID),
@@ -160,4 +149,7 @@ primary key (borrowingID),
 foreign key (username) references users(username),
 foreign key (operatorID) references operators(operatorID),
 foreign key (bookID) references books(bookID));
+
+alter table users
+add owns boolean default 0;
 
