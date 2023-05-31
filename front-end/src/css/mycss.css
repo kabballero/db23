@@ -26,7 +26,7 @@ body{
     gap: 10px;
   }
   .button{
-    background: #ac580b;
+    background: #a493af;
     border: none;
     border-radius: 50px;
     font-size: 30px;
@@ -39,13 +39,13 @@ body{
     align-items: center;
     text-align: center;
     border-radius: 50px;
-    background: #8711b6;
+    background: #9c56dd;
   }
   .input{
     text-align: center;
     border-radius: 50px;
     font-size: 30px;
-    background: #b67b6d;
+    background: #a493af;
   }
   .title{
     font-size: 30px;
@@ -70,7 +70,7 @@ body{
   }
   .navbar{
     top: 0px;
-    background: #9c56dd;
+    background: #c03737;
   }
   .container2{
     top: 0px;
