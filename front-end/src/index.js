@@ -4,10 +4,10 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './app'
 import Home from './components/home';
 import Login from './components/login';
-import TheBoss from './components/theBoss';
-import Caporegime from './components/caporegime';
+import TheBoss from './components/admin/theBoss';
+import Caporegime from './components/operators/caporegime';
 import Sonderkommando from './components/sonderkommando';
-import Kyles from './components/kyles';
+import Kyles from './components/users/kyles';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/admins',
+    path: '/admins/:username',
     element: <TheBoss />,
   },
   {
@@ -29,11 +29,7 @@ const router = createBrowserRouter([
     element: <Caporegime />,
   },
   {
-    path: '/teachers',
-    element: <Sonderkommando />,
-  },
-  {
-    path: '/students/:userName',
+    path: '/users/:userName',
     element: <Kyles />,
   }
 ]);
