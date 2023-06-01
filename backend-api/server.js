@@ -184,7 +184,7 @@ app.post('/updateBookAvailability/:bookID/:newavailability',(req,res)=>{
 })
 
 app.get('/getoperator/:username',(req,res)=>{
-    var myquery=`select schoolID from teachers where username='${req.params.username}'`
+    var myquery=`select operators.schoolID from teachers join operators on teachers.teacherID=operators.teacherID where username='${req.params.username}'`
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
         res.send(result)
