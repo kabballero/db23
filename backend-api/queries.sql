@@ -57,6 +57,26 @@ where authorID not in
 join borrowing as t2 
 on t1.bookID=t2.bookID);
 
+-- 3.1.5
+
+select fullname
+from users
+inner join teachers on users.username = teachers.username
+inner join operators on teachers.teacherID = operators.teacherID
+inner join
+(select q1.operatorID
+from
+(select operatorID, count(bookID) as cnt1 -- finding the borrowing of each operator
+from borrowing 
+where year(borrowDate) > year(current_date()) - 1
+group by operatorID
+having cnt1 > 20) as q1
+inner join (select operatorID, count(bookID) as cnt1
+from borrowing 
+where year(borrowDate) > year(current_date()) - 1
+group by operatorID
+having cnt1 > 20) as q2 on q1.cnt1 = q2.cnt1 and q1.operatorID <> q2.operatorID) as d1 on d1.operatorID = operators.operatorID;
+
 -- 3.1.6
 
 select t3.ca,t3.cb,count(t3.bookID)
@@ -71,13 +91,28 @@ inner join borrowing as t4 on t3.bookID = t4.bookID
 group by t3.ca,t3.cb
 order by count(t3.bookID) desc limit 3;
 
+-- 3.1.7
+
+select authorName
+from authors
+inner join
+(select authorID,count(bookID) as cnt6
+from written
+group by authorID
+having cnt6 <= 
+(select max(x1.cnt5) 
+from
+(select authorID,count(bookID) as cnt5
+from written
+group by authorID) as x1) - 5) as q50 on q50.authorID = authors.authorID;
+
 -- 3.2.1
 
 DELIMITER //
 CREATE definer=`root`@`localhost` PROCEDURE query_3_2_1 (in titlos varchar(150),in katigoria varchar(150),in siggrafeas varchar(150), in antitipa int)
  BEGIN
 	IF titlos IS NOT NULL THEN
-	select title,group_concat(authorName) as an
+	select title,group_concat(authorName) as an,books.bookID as bookID
 	from books
     inner join written on books.bookID = written.bookID
     inner join authors on written.authorID = authors.authorID
@@ -85,21 +120,23 @@ CREATE definer=`root`@`localhost` PROCEDURE query_3_2_1 (in titlos varchar(150),
     group by title;-- and (category like katigoria) and (authorName like siggrafeas) and (availability like antitipa));
     
 ELSEIF katigoria IS NOT NULL THEN
-	select title,group_concat(authorName) as an
+	select title,group_concat(authorName) as an,books.bookID as bookID
 	from books
     inner join written on books.bookID = written.bookID
     inner join authors on written.authorID = authors.authorID
-	where category = katigoria
+    inner join belongs on books.bookID = belongs.bookID
+    inner join bookCategory on bookCategory.category=belongs.category
+	where bookCategory.category = katigoria
     group by title;
 ELSEIF siggrafeas IS NOT NULL THEN
-	select title,group_concat(authorName) as an
+	select title,group_concat(authorName) as an,books.bookID as bookID
 	from books
     inner join written on books.bookID = written.bookID
     inner join authors on written.authorID = authors.authorID
 	where authorName = siggrafeas
     group by title;
 ELSEIF antitipa IS NOT NULL THEN
-	select title,group_concat(authorName) as an
+	select title,group_concat(authorName) as an,books.bookID as bookID
 	from books
     inner join written on books.bookID = written.bookID
     inner join authors on written.authorID = authors.authorID
@@ -156,54 +193,54 @@ CREATE definer=`root`@`localhost` PROCEDURE find_books(
 	IN b_title VARCHAR(100), IN b_category VARCHAR(20), IN b_author VARCHAR(20) )
 BEGIN
     IF b_title IS NOT NULL and b_category is not null and b_author is not null then
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE books.title = b_title and belongs.category=b_category and authorName=b_author;
     elseif b_title IS NOT NULL and b_category is not null then
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE books.title = b_title and belongs.category=b_category;
     ELSEIF b_title IS NOT NULL and b_author is not null then
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE books.title = b_title and authorName=b_author;
     ELSEIF b_category is not null and b_author is not null then
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE belongs.category=b_category and authorName=b_author;
   ELSEIF b_title IS NOT NULL THEN
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE books.title = b_title;
   ELSEIF b_category IS NOT NULL THEN
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
     WHERE belongs.category = b_category;
   ELSEIF b_author IS NOT NULL THEN
-    SELECT *
+    SELECT distinct books.image,books.bookID,books.summary,books.pages,books.availability,books.languages,books.title
     FROM books
     JOIN belongs ON books.bookID = belongs.bookID
     JOIN written ON books.bookID = written.bookID
     JOIN authors ON written.authorID = authors.authorID
-    WHERE authors.authorName = b_authorName;
+    WHERE authors.authorName = b_author;
   END IF;
 END//
 

@@ -12,7 +12,7 @@ app.use(cors());
 
 var  con = mysql.createPool({
     multipleStatements: true,
-    host: "127.0.0.1",
+    host: "127.0.0.2",
     user:"root",
     database: "library"
 });  
@@ -100,8 +100,25 @@ app.post('/borrowRequest/:username/:bookID',(req,res)=>{
     });
 })
 
+app.get('/checkreservationUser/:username/:bookID',(req,res)=>{
+    var myquery=`select username from borrowing where username='${req.params.username}' and bookID=${req.params.bookID}`
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
+
+app.post('/makereservationUser/:username/:bookID',(req,res)=>{
+    var myquery=`insert into reservation(reservationDate,username,bookID) values(current_date(),'${req.params.username}',${req.params.bookID})`
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
+
 app.get('/usersdata/:username',(req,res)=>{
-    var myquery=`select t1.username,t1.owns,t2.studentID,t2.studentborrowedbooks,t3.schoolID,t3.teacherID,t3.teacherborrowedbooks from 
+    var myquery=`
+    select t1.username,t1.owns,t2.studentID,t2.Sreservenum,t2.studentborrowedbooks,t3.schoolID ,t3.teacherID,t3.Treservenum,t3.teacherborrowedbooks from 
     users as t1 left join students as t2 on t1.username=t2.username
     left join teachers as t3 on t1.username=t3.username
     where t1.username='${req.params.username}'`
@@ -115,12 +132,17 @@ app.get('/profile/:username',(req,res)=>{
     var myquery=`select * from users where username='${req.params.username}'`
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
+        result.forEach(request => {
+            request.birthdate = request.birthdate.toLocaleDateString();
+          });
         res.send(result)
     });
 })
 
 app.post('/changePassword/:username/:newpassword',(req,res)=>{
-    var myquery=`update users set password='${req.params.newpassword}' where username='${req.params.username}'`
+    var myquery=`
+    update users set password='${req.params.newpassword}' where username='${req.params.username}';
+    `
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
         res.send(result)
@@ -218,7 +240,8 @@ app.get('/requests/:schoolid',(req,res)=>{
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
         result.forEach(request => {
-            request.dateRequest = request.dateRequest.toLocaleDateString();
+            const date = new Date(request.dateRequest);
+            request.dateRequest = date.toLocaleDateString();
           });
         res.send(result)
     });
@@ -258,7 +281,9 @@ app.post('/makeborrow3/:username/:bookid/:date/:operatorid/:reservationid',(req,
         month: '2-digit',
         day: '2-digit'
     }).replace(/\//g, '/');
-    var myquery=`insert into borrowing(borrowDate,username,bookID,operatorID) values('${formattedDate}','${req.params.username}',${req.params.bookid},${req.params.operatorid}) `
+    var myquery=`
+    insert into borrowing(borrowDate,username,bookID,operatorID) values('${formattedDate}','${req.params.username}',${req.params.bookid},${req.params.operatorid})
+    `
     var myquery2=`delete from reservation where reservationID=${req.params.reservationid}`
     con.query(myquery2, async function(err,result,fields){
         if (err) throw err;});
@@ -599,7 +624,9 @@ app.get('/borrowed2/:name',(req,res)=>{
 })
 
 app.post('/return/:bid',(req,res)=>{   
-    var myquery=`update borrowing set returndate=current_date() where borrowingID=${req.params.bid}`;
+    var myquery=`
+    update borrowing set returndate=current_date() where borrowingID=${req.params.bid};
+    `;
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
         res.send(result)
@@ -608,6 +635,38 @@ app.post('/return/:bid',(req,res)=>{
 
 app.post('/deleteoperator/:n',(req,res)=>{   
     var myquery=`delete from operators where teacherID in(select teacherID from teachers where username='${req.params.n}')`;
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
+
+app.get('/seereviews/:id',(req,res)=>{   
+    var myquery=`select * from rating where bookID=${req.params.id}`;
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
+
+app.post('/changeTeacher/:oldusername/:newFullName/:newStreetNumber/:newZipcode/:newPhone/:newStreetName/:newUserName/:newpassword',(req,res)=>{   
+    const UNValue = req.params.newUserName !== 'undefined'? `'${req.params.newUserName}'` : null;
+    const FNValue = req.params.newFullName !== 'undefined' ? `'${req.params.newFullName}'` : null;
+    const PHValue = req.params.newPhone !== 'undefined' ? `'${req.params.newPhone}'` : null;
+    const SNAValue = req.params.newStreetName !== 'undefined'? `'${req.params.newStreetName}'` : null;
+    const SNUValue = req.params.newStreetNumber !== 'undefined' ? `'${req.params.newStreetNumber}'` : null;
+    const ZValue = req.params.newZipcode !== 'undefined' ? `'${req.params.newZipcode}'` : null;
+    const PAValue = req.params.newpassword !== 'undefined' ? `'${req.params.newpassword}'` : null;
+    var myquery=`update users set
+    username = coalesce(${UNValue},username),
+    phonenumber = coalesce(${PHValue},phonenumber),
+    password = coalesce(${PAValue},password),
+    zipcode = coalesce(${ZValue},zipcode),
+    streetname = coalesce(${SNAValue},streetname),
+    streetNUMBER = coalesce(${SNUValue},streetNUMBER),
+    fullname = coalesce(${FNValue},fullname)
+    where username='${req.params.oldusername}'
+    `;
     con.query(myquery, async function(err,result,fields){
         if (err) throw err;
         res.send(result)
@@ -641,3 +700,16 @@ app.get('/backup', (req, res) => {
       }
     });
   });
+
+  app.get('/bookForUpdate/:bookID',(req,res)=>{   
+    const id=req.params.bookID;
+    var myquery=`select books.bookID,title,books.availability,belongs.category,authors.authorName,books.image,books.pages,books.languages,books.summary from books inner join written on books.bookID = written.bookID
+    inner join authors on written.authorID = authors.authorID
+    inner join belongs on books.bookID = belongs.bookID
+    inner join bookCategory on bookCategory.category=belongs.category where books.bookID=${id}
+    group by(books.bookID)`;
+    con.query(myquery, async function(err,result,fields){
+        if (err) throw err;
+        res.send(result)
+    });
+})
