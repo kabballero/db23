@@ -11,7 +11,8 @@ export default function Login() {
         e.preventDefault()
         console.log({userName})
         console.log({password})
-        const data= await fetch('http://localhost:9103/login/'+role+'/'+userName+'/'+password)
+        const p=encodeURIComponent(password)
+        const data= await fetch('http://localhost:9103/login/'+role+'/'+userName+'/'+p)
         .then(response => response.json()).catch((e) => {console.log(e.message)})
         console.log(data[0].login)
         if(data[0].login=='success'){

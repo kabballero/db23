@@ -8,13 +8,13 @@ export default function Home() {
             <h1 className="header"> SCHOOLIB</h1>
             <div className="container">
             <Link to="/login/admins">
-            <button className="button">the boss</button>
+            <button className="button">admin</button>
             </Link>
             <Link to="/login/operator">
-            <button className="button">caporegime</button>
+            <button className="button">operator</button>
             </Link>        
             <Link to="/login/users">
-            <button className="button">kyles</button>
+            <button className="button">user</button>
             </Link>
             </div>
         </div>
