@@ -3,6 +3,7 @@ import {useParams } from 'react-router-dom';
 import '../../css/mycss.css'
 
 export default function Review({bookID,changeStatus}) {
+    console.log(bookID)
     const params = useParams();
     const username = params.userName;
     const [text, setText] = useState()

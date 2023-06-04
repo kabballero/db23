@@ -55,7 +55,7 @@ export default function Kyles() {
                         <p className="title">book search</p>
                         <p>select a category</p>
                         <select value={select} onChange={(e) => setSelect(e.target.value)} className="button">
-                            <option value="null">none</option>
+                            <option>none</option>
                             {categories?.map((category) => (
                                 <option key={category.category} value={category.category}>{category.category}</option>
                             ))}
