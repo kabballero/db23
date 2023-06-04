@@ -30,7 +30,7 @@ export default function CapoMkBorrow({schoolid}){
                 setSuccess(true);
             }
         }
-        else if(data0[0].studentborrowedbooks==2 || data0[0].teacherborrowedbooks==1 || data0[0].owns==0){
+        else if(data0[0].studentborrowedbooks==2 || data0[0].teacherborrowedbooks==1 || data0[0].owns==1){
             setBanUser(true);
         }
         else if(data1[0].availability==0){
