@@ -79,25 +79,25 @@ export default function TheBoss() {
             {addOperator &&
                 <BossAddOperator />
             }
-            {query311 &&
+            {query311 && !addOperator && !addSchool && !deleteoperator &&
                 <Q311 />
             }
-            {query312 &&
+            {query312 && !addOperator && !addSchool && !deleteoperator &&
                 <Q312 />
             }
-            {query313 &&
+            {query313 && !addOperator && !addSchool && !deleteoperator &&
                 <Q313 />
             }
-            {query314 &&
+            {query314 && !addOperator && !addSchool && !deleteoperator &&
                 <Q314 />
             }
-            {query315 &&
+            {query315 && !addOperator && !addSchool && !deleteoperator &&
                 <Q315 />
             }
-            {query316 &&
+            {query316 && !addOperator && !addSchool && !deleteoperator &&
                 <Q316 />
             }
-            {query317 &&
+            {query317 && !addOperator && !addSchool && !deleteoperator &&
                 <Q317 />
             }
         </div>
