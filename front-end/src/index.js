@@ -6,7 +6,6 @@ import Home from './components/home';
 import Login from './components/login';
 import TheBoss from './components/admin/theBoss';
 import Caporegime from './components/operators/caporegime';
-import Sonderkommando from './components/sonderkommando';
 import Kyles from './components/users/kyles';
 const container = document.getElementById('root');
 const root = createRoot(container);
