@@ -252,7 +252,7 @@ function Result312B({ category }) {
     }
     useEffect(() => {
         async function getData() {
-            const data = await fetchData(`http://localhost:9103/312A/${category}`)
+            const data = await fetchData(`http://localhost:9103/312B/${category}`)
             console.log(data.length)
             setResult(data);
         }
